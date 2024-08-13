@@ -6,9 +6,9 @@ This repo builds a container for RISC-V Development. It is built using Fedora 40
 
 The containers are designed to be used with podman and are designed to be run rootless. If you are running on MacOS or Windows, you will need [podman desktop](https://podman-desktop.io) installed. Both amd64 (x86_64) and arm64 (Aarch64) builds are provided at [quay.io/edolnx/riscv_dev](https://quay.io/repository/edolnx/riscv_dev). Note that the container is large (around 3G) but includes all the necessary tools and is much faster than building all the tools yourself if you are not making changes to the tooling environment. The easiest way to use the container is to be within something like the sail-riscv repository and run:
 
-`podman run -ti -v .:/root/work quay.io/edolnx/riscv_dev:latest /bin/bash -i`
+`podman run -ti -v $(pwd):/work quay.io/edolnx/riscv_dev:latest /bin/bash -i`
 
-After the container downloads, you will be given a prompt within the container lke `[root@a30692197e9a /]#` from there you can `cd /root/work` and then build the codebase with a simple `make`. The output will be stored on your local disk, and typing `exit` will end the container session.
+After the container downloads, you will be given a prompt within the container lke `[root@a30692197e9a /]#` from there you can `cd work` and then build the codebase with a simple `make`. The output will be stored on your local disk, and typing `exit` will end the container session.
 
 ## Notes on security
 
@@ -29,12 +29,18 @@ Should you want to make changes and rebuild this container for yourself there ar
 - Stage 2 is building the GCC Toolchain in multilib mode (supporting RV32 and RV64) with newlib support.
 - Stage 3 is setting up direnv and asdf-vm as well as the runtime environments needed by `sail-riscv`
 
-# License
+## License
 
-This is provided AS-IS under the terms of the MIT license. Contributions are welcome for updates.
+This is provided AS-IS under the terms of the MIT license. Contributions are welcome via pull-requests to this repository.
 
-# Container Information
+# How to use on Windows
 
-[![riscv_dev Container Repository on Quay](https://quay.io/repository/edolnx/riscv_dev/status "riscv_dev Repository on Quay")](https://quay.io/repository/edolnx/riscv_dev)
-[![riscv_dev-arm64 Repository on Quay](https://quay.io/repository/edolnx/riscv_dev-arm64/status "riscv_dev-arm64 Repository on Quay")](https://quay.io/repository/edolnx/riscv_dev-arm64)
-[![riscv_dev-amd64 Repository on Quay](https://quay.io/repository/edolnx/riscv_dev-amd64/status "riscv_dev-amd64 Repository on Quay")](https://quay.io/repository/edolnx/riscv_dev-amd64)
+You will need to download [podman desktop](https://podman-desktop.io) on your Windows machine. When installing podman desktop, you do not need any components other than podman. As the last step of install, podman-desktop will create a podman-machine. During this process, you will be asked three questions. You can turn off "Machine with root privileges" and turn on "User mode networking", while leaving the other options alone. These enhance security and reduce complexity of networking, especially on portable machines. The command given above in the Usage section will work in you Git Bash shell. If you want to use PowerShell instead, the correct command would be:
+
+`podman run -ti -v $(Get-Location):/work quay.io/edolnx/riscv_dev:latest /bin/bash -i`
+
+This would set your current working directory to be the `/work` path inside the container. You can also just use a standard Windows path like `C:\Users\edolnx\work:/work` as well.
+
+# How to use on MacOS
+
+You will need to download [podman desktop](https://podman-desktop.io) on your Windows machine. When installing podman desktop, you do not need any components other than podman. As the last step of install, podman-desktop will create a podman-machine. During this process, you will be asked three questions. You can turn off "Machine with root privileges" and turn on "User mode networking", while leaving the other options alone. These enhance security and reduce complexity of networking, especially on portable machines. MacOS security requires you to specify the full path to any volume you are trying to mount, hence the use of `$(pwd)` in the Usage example above. The default command used in the Usage section executes a `bash` shell by invoking `/bin/bash -i`, but you can substitute a more familar ZSH shell using `/usr/bin/zsh -i` if you choose.

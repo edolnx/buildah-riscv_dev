@@ -37,3 +37,16 @@ rm -r $HOME/riscv-gnu-toolchain
 echo '#Add RISC-V multilib newlib toolchain to path' >> $HOME/.bashrc
 echo 'export PATH=$PATH:/opt/riscv-newlib/bin' >> $HOME/.bashrc
 
+# Download, Build, Install, and Cleanup the SPIKE model
+cd $HOME
+git clone https://github.com/riscv/riscv-isa-sim.git -b master
+cd riscv-isa-sim
+mkdir build
+cd build
+../configure --prefix=/opt/spike
+make -j${JCOUNT}
+make install
+cd $HOME
+rm -r riscv-isa-sim
+echo '#Add RISC-V spike model to path' >> $HOME/.bashrc
+echo 'export PATH=$PATH:/opt/spike/bin' >> $HOME/.bashrc

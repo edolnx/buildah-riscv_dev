@@ -2,14 +2,14 @@
 
 # figure out the targetarch
 MACHINEARCH=$(uname -m)
-if [ $MACHINEARCH eq "x86_64" ]; then
-	echo "Building amd64"
+if [ "$MACHINEARCH" == "x86_64" ]; then
+	echo "amd64"
 	TARGETARCH=amd64
-elif [ $MACHINEARCH eq "aarch64" ]; then
-	echo "Building arm64"
+elif [ "$MACHINEARCH" == "aarch64" ]; then
+	echo "arm64"
 	TARGETARCH=arm64
-elif [ $MACHINEARCH eq "riscv64" ]; then
-	echo "Building riscv64"
+elif [ "$MACHINEARCH" == "riscv64" ]; then
+	echo "riscv64"
 	TARGETARCH=riscv64
 else
 	echo "unknown"

@@ -5,8 +5,14 @@ MAINTAINER "Carl Perry <caperry@edolnx.net>"
 RUN dnf update
 # Deps for RISC-V GNU Toolchain: https://github.com/riscv-collab/riscv-gnu-toolchain
 RUN dnf install -y autoconf automake python3 libmpc-devel mpfr-devel gmp-devel
-RUN dnf install -y gawk bison flex texinfo patchutils gcc gcc-c++ zlib-devel
-RUN dnf install -y expat-devel libslirp-devel diffutils binutils-gold mold
+RUN dnf install -y gawk bison flex texinfo patchutils gcc gcc-c++ zlib-devel dtc
+RUN dnf install -y expat-devel libslirp-devel diffutils binutils-gold mold 
+# RISCOF "Essential Tools"
+RUN dnf install -y wget vim gperf telnet bc zip unzip texinfo 
+# RISCOF "Network tools"
+RUN dnf install -y iputils net-tools netcat
+# RISCOF qemu
+RUN dnf install -y qemu
 # Deps for SAIL
 RUN dnf install -y z3 git zsh
 # Deps for Python: https://github.com/pyenv/pyenv/wiki#suggested-build-environment
