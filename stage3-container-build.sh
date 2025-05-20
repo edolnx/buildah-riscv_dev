@@ -22,7 +22,7 @@ cat <<EOF > $HOME/.zshrc
 source $HOME/.bashrc
 EOF
 
-# Set sane defaults for asdf
+# Set sane defaults for mise
 cat <<EOF > ~/.asdfrc
 legacy_version_file = no
 use_release_candidates = no
@@ -32,10 +32,9 @@ disable_plugin_short_name_repository = no
 concurrency = auto
 EOF
 
-# Install and enable asdf
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.14.0
-source "$HOME/.asdf/asdf.sh"
-echo 'source "$HOME/.asdf/asdf.sh"' >> $HOME/.bashrc
+# Enable mise
+eval "$(~/.local/bin/mise activate bash)"
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
 
 # Install and enable direnv
 curl -sfL https://direnv.net/install.sh | bash
@@ -49,23 +48,23 @@ EOF
 eval "$(direnv hook bash)"
 echo 'eval "$(direnv hook bash)"' >> $HOME/.bashrc
 
-# Add various ASDF language plugins
-asdf plugin add python
-asdf plugin add ruby
-asdf plugin add ocaml
-asdf plugin add opam
+# Add various mise language plugins
+mise plugin add python
+mise plugin add ruby
+mise plugin add ocaml
+mise plugin add opam
 
-# Install various ASDF managed runtimes at specific versions
-asdf install opam 2.2.0 || exit 1
-asdf install ocaml 4.13.1 || exit 2
-asdf install python 3.10.14 || exit 3
-asdf install ruby 3.2.3 || exit 4
+# Install various mise managed runtimes at specific versions
+mise install opam 2.2.0 || exit 1
+mise install ocaml 4.13.1 || exit 2
+mise install python 3.10.14 || exit 3
+mise install ruby 3.2.3 || exit 4
 
 # Install OPAM components
-echo "Activating asdf environments"
-asdf shell ocaml 4.13.1 
-asdf shell opam 2.2.0
-asdf shell python 3.10.14
+echo "Activating mise environments"
+mise shell ocaml 4.13.1 
+mise shell opam 2.2.0
+mise shell python 3.10.14
 echo "Initialize opam"
 opam init --disable-sandboxing #Sanboxing doesn't work within the conatiner
 echo "Configure opam environment"
@@ -76,7 +75,7 @@ echo 'export OPAMCLI=2.0' >> $HOME/.bashrc
 echo "opam install lem"
 opam install "lem=2022-12-10" -y
 echo "opam install sail"
-opam install "sail=0.18" -y
+opam install "sail=0.19" -y
 opam install hardtools7 -y
 
 # Build and install Golden Model from source
@@ -114,15 +113,46 @@ pip3 install pexpect \
         riscv-ctg 
 
 # Install Ruby and Ruby Deps for unified-db
-asdf shell ruby 3.2.3
-gem install asciidoctor-diagram -v '~> 2.2'
-gem install asciidoctor-multipage
-gem install base64
-gem install bigdecimal
-gem install json_schemer -v '~> 1.0'
-gem install rake -v '~> 13.0'
-gem install slim -v '~> 5.1'
-gem install treetop -v '1.6.12'
-gem install webrick
-gem install yard
-gem install solargraph
+mise shell ruby 3.2.3
+gem install "ttfunk", "1.7" # needed to avoid having asciidoctor-pdf dependencies pulling in a buggy version of ttunk (1.8)
+gem install "json_schemer" -v "~> 1.0"
+gem install "ruby-progressbar" -v "~> 1.13"
+gem install "treetop" -v "1.6.12"
+gem install "activesupport"
+gem install "asciidoctor-diagram" -v "~> 2.2"
+gem install "asciidoctor-pdf"
+gem install "base64"
+gem install "bigdecimal"
+gem install "minitest"
+gem install "pygments.rb"
+gem install "rake", "~> 13.0"
+gem install "rouge"
+gem install "webrick"
+gem install "yard"
+gem install "debug"
+gem install "rdbg"
+gem install "rubocop-minitest"
+gem install "ruby-prof"
+gem install "ruby-prof-flamegraph"
+gem install "solargraph"
+
+# Ruby deps for isa-manual
+gem install 'asciidoctor'
+gem install 'asciidoctor-bibtex'
+gem install 'asciidoctor-diagram'
+gem install 'asciidoctor-lists'
+gem install  'mathematical'
+gem install 'asciidoctor-mathematical'
+gem install 'asciidoctor-pdf'
+gem install 'asciidoctor-epub3'
+gem install 'citeproc-ruby'
+gem install 'coderay'
+gem install 'csl-styles'
+gem install 'json'
+gem install 'pygments.rb'
+gem install 'rghost'
+gem install 'rouge'
+gem install 'ruby_dev'
+
+
+# TODO: Wavedrom
